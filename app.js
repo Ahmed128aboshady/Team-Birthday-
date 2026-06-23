@@ -162,6 +162,24 @@ const initialMembersFallback = [
 ];
 
 // ==========================================
+// FIREBASE CONFIGURATION & INITIALIZATION
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBrRNK4oyOVDE-mVdVId37RVT-4LtS8o14",
+  authDomain: "team-birthday-fb1a8.firebaseapp.com",
+  projectId: "team-birthday-fb1a8",
+  storageBucket: "team-birthday-fb1a8.firebasestorage.app",
+  messagingSenderId: "168405804715",
+  appId: "1:168405804715:web:270a35ee527873e50e79ee",
+  measurementId: "G-73S419F909",
+  databaseURL: "https://team-birthday-fb1a8-default-rtdb.firebaseio.com"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// ==========================================
 // STATE MANAGEMENT
 // ==========================================
 let currentLang = 'ar';
@@ -254,36 +272,72 @@ function getZodiacSign(dobString) {
 }
 
 // ==========================================
-// DATA CORE
+// DATA CORE & SYNC
 // ==========================================
+const dbRef = database.ref('members');
+
 function loadData() {
+  // Listen to Firebase Realtime Database for updates in real-time
+  dbRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data && data.length > 0) {
+      members = data;
+      // Sync locally as fallback
+      localStorage.setItem('office_members', JSON.stringify(members));
+      renderDashboard();
+    } else {
+      // Database is empty (first load), seed it with default 16 members
+      console.log("Firebase database is empty. Seeding defaults...");
+      seedDefaultData();
+    }
+  }, (error) => {
+    console.error("Firebase Database read failed: ", error);
+    // If permission denied or firebase not configured, load locally
+    loadLocalDataFallback();
+  });
+}
+
+function seedDefaultData() {
+  const localData = localStorage.getItem('office_members');
+  if (localData) {
+    members = JSON.parse(localData);
+  } else {
+    members = initialMembersFallback;
+  }
+  
+  dbRef.set(members)
+    .then(() => {
+      console.log("Successfully seeded Firebase database.");
+      renderDashboard();
+    })
+    .catch(err => {
+      console.error("Failed to seed Firebase:", err);
+      renderDashboard();
+    });
+}
+
+function loadLocalDataFallback() {
   const localData = localStorage.getItem('office_members');
   if (localData) {
     members = JSON.parse(localData);
     renderDashboard();
   } else {
-    // Attempt to load from JSON file, fallback to array if file fetch fails
-    fetch('members.json')
-      .then(response => {
-        if (!response.ok) throw new Error("File not found");
-        return response.json();
-      })
-      .then(data => {
-        members = data;
-        saveToLocalStorage();
-        renderDashboard();
-      })
-      .catch(err => {
-        console.warn("Could not fetch members.json. Falling back to default data.", err);
-        members = initialMembersFallback;
-        saveToLocalStorage();
-        renderDashboard();
-      });
+    members = initialMembersFallback;
+    renderDashboard();
   }
 }
 
 function saveToLocalStorage() {
-  localStorage.setItem('office_members', JSON.stringify(members));
+  // Write to Firebase database instead. This triggers the 'on' listener automatically for everyone.
+  dbRef.set(members)
+    .then(() => {
+      console.log("Data synced to Firebase successfully.");
+    })
+    .catch(err => {
+      console.error("Failed to sync to Firebase:", err);
+      // Fallback: save locally
+      localStorage.setItem('office_members', JSON.stringify(members));
+    });
 }
 
 // ==========================================
