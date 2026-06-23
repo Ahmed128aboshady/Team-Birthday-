@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">لوحة أعياد ميلاد المكتب | Office Birthdays Tracker</title>
+  <meta name="description" content="منصة تفاعلية ممتازة لتتبع أعياد ميلاد موظفي المكتب والاحتفال بها.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i data-lucide="cake-slice"></i>
+        </div>
+        <div class="logo-text">
+          <h1 data-i18n="app-title">أعياد ميلاد فريقنا</h1>
+          <p data-i18n="app-subtitle">تتبع واحتفل بالمناسبات الخاصة لـ 16 زميل عمل</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Date display -->
+        <div class="current-date-badge">
+          <i data-lucide="calendar"></i>
+          <span id="current-date-text">-</span>
+        </div>
+        
+        <!-- Language Selector -->
+        <button id="lang-toggle-btn" class="btn btn-secondary btn-icon-text">
+          <i data-lucide="languages"></i>
+          <span id="lang-btn-text">English</span>
+        </button>
+
+        <!-- Import / Export -->
+        <button id="export-btn" class="btn btn-secondary btn-icon" title="تصدير البيانات" data-i18n-title="export-title">
+          <i data-lucide="download"></i>
+        </button>
+        <button id="import-btn" class="btn btn-secondary btn-icon" title="استيراد البيانات" data-i18n-title="import-title">
+          <i data-lucide="upload"></i>
+        </button>
+
+        <!-- Add Member -->
+        <button id="add-member-btn" class="btn btn-primary btn-icon-text">
+          <i data-lucide="plus"></i>
+          <span data-i18n="add-new-btn">إضافة زميل جديد</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Today's Birthday Section (Hidden by default, shown dynamically) -->
+    <section id="today-banner" class="today-banner-card hidden">
+      <div class="banner-glow-effect"></div>
+      <div class="banner-content">
+        <div class="celebration-badge">
+          <i data-lucide="sparkles"></i>
+          <span data-i18n="birthday-today">يحتفل اليوم!</span>
+        </div>
+        <div class="birthday-person-info">
+          <div class="celebrant-avatar-wrapper">
+            <div id="today-avatar" class="celebrant-avatar"></div>
+            <div class="party-hat">🎉</div>
+          </div>
+          <div class="celebrant-details">
+            <h2 id="today-name">الاسم بالكامل</h2>
+            <p id="today-dept-age">القسم • العمر 30 سنة</p>
+            <span id="today-zodiac-badge" class="badge-zodiac">
+              <span id="today-zodiac-icon">✨</span>
+              <span id="today-zodiac-name">البرج</span>
+            </span>
+          </div>
+        </div>
+        <div class="banner-action">
+          <button id="celebrate-btn" class="btn btn-celebrate btn-lg">
+            <i data-lucide="gift"></i>
+            <span data-i18n="celebrate-button">أرسل تهنئة واحتفل!</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top Grid: Upcoming and Stats -->
+    <div class="dashboard-grid">
+      <!-- Upcoming Birthdays Card -->
+      <section class="dashboard-card upcoming-card">
+        <div class="card-header">
+          <div class="title-with-icon">
+            <i data-lucide="alarm-clock"></i>
+            <h3 data-i18n="upcoming-title">المناسبات القادمة</h3>
+          </div>
+          <span class="count-badge" id="upcoming-count">0</span>
+        </div>
+        <div class="upcoming-list" id="upcoming-list-container">
+          <!-- Will be generated dynamically -->
+          <div class="loading-placeholder">جاري تحميل البيانات...</div>
+        </div>
+      </section>
+
+      <!-- Monthly stats -->
+      <section class="dashboard-card stats-card">
+        <div class="card-header">
+          <div class="title-with-icon">
+            <i data-lucide="bar-chart-3"></i>
+            <h3 data-i18n="distribution-title">التوزيع الشهري لأعياد الميلاد</h3>
+          </div>
+        </div>
+        <div class="monthly-distribution" id="monthly-stats-container">
+          <!-- Monthly bar charts dynamically generated -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Search & Filters -->
+    <section class="search-filter-section">
+      <div class="search-wrapper">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="search-input" placeholder="ابحث باسم الزميل أو القسم..." data-i18n-placeholder="search-placeholder">
+      </div>
+      <div class="filter-controls">
+        <div class="select-wrapper">
+          <i data-lucide="filter" class="select-icon"></i>
+          <select id="month-filter">
+            <option value="all" data-i18n="month-all">جميع الأشهر</option>
+            <option value="0" data-i18n="month-0">يناير / January</option>
+            <option value="1" data-i18n="month-1">فبراير / February</option>
+            <option value="2" data-i18n="month-2">مارس / March</option>
+            <option value="3" data-i18n="month-3">أبريل / April</option>
+            <option value="4" data-i18n="month-4">مايو / May</option>
+            <option value="5" data-i18n="month-5">يونيو / June</option>
+            <option value="6" data-i18n="month-6">يوليو / July</option>
+            <option value="7" data-i18n="month-7">أغسطس / August</option>
+            <option value="8" data-i18n="month-8">سبتمبر / September</option>
+            <option value="9" data-i18n="month-9">أكتوبر / October</option>
+            <option value="10" data-i18n="month-10">نوفمبر / November</option>
+            <option value="11" data-i18n="month-11">ديسمبر / December</option>
+          </select>
+        </div>
+        
+        <div class="select-wrapper">
+          <i data-lucide="arrow-up-down" class="select-icon"></i>
+          <select id="sort-filter">
+            <option value="countdown" data-i18n="sort-countdown">الترتيب حسب الأقرب</option>
+            <option value="name" data-i18n="sort-name">الترتيب أبجدياً</option>
+            <option value="age" data-i18n="sort-age">الترتيب حسب العمر (الأكبر)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid: All Members -->
+    <main class="members-grid-section">
+      <div class="section-title-bar">
+        <h2 data-i18n="all-members-title">فريق العمل (16)</h2>
+        <span class="active-filters-pill hidden" id="filters-status-pill">
+          <span id="filters-status-text">فلتر نشط</span>
+          <button id="clear-filters-btn"><i data-lucide="x"></i></button>
+        </span>
+      </div>
+      
+      <div class="members-grid" id="members-grid-container">
+        <!-- Dynmically loaded cards -->
+      </div>
+      
+      <!-- Empty state -->
+      <div id="empty-state" class="empty-state hidden">
+        <i data-lucide="users-round" class="empty-icon"></i>
+        <h3 data-i18n="empty-title">لم نجد أحداً!</h3>
+        <p data-i18n="empty-subtitle">تأكد من كتابة الاسم بشكل صحيح أو جرب تغيير الفلتر.</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>© <span id="current-year">2026</span> - <span data-i18n="footer-text">لوحة أعياد ميلاد الموظفين للمكتب. صُنع بكل حب ❤️</span></p>
+      <div class="footer-links">
+        <a href="https://github.com" target="_blank" class="footer-link"><i data-lucide="github"></i> GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal: Add / Edit Member -->
+  <div id="member-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title" data-i18n="modal-title-add">إضافة زميل جديد</h3>
+        <button id="modal-close-btn" class="modal-close-icon"><i data-lucide="x"></i></button>
+      </div>
+      <form id="member-form" class="modal-body">
+        <input type="hidden" id="member-id">
+        
+        <!-- English Name -->
+        <div class="form-group">
+          <label for="member-name-en">الاسم بالإنجليزية (English Name) <span class="required">*</span></label>
+          <input type="text" id="member-name-en" placeholder="e.g. Iman Yousef" required>
+        </div>
+        
+        <!-- Arabic Name -->
+        <div class="form-group">
+          <label for="member-name-ar">الاسم بالعربية <span class="required">*</span></label>
+          <input type="text" id="member-name-ar" placeholder="مثال: إيمان يوسف" required>
+        </div>
+        
+        <div class="form-row">
+          <!-- DOB -->
+          <div class="form-group">
+            <label for="member-dob">تاريخ الميلاد (Date of Birth) <span class="required">*</span></label>
+            <input type="date" id="member-dob" required>
+          </div>
+          
+          <!-- Avatar Custom initials (optional) -->
+          <div class="form-group">
+            <label for="member-avatar">الأحرف الأولى للملف الشخصي (Initials)</label>
+            <input type="text" id="member-avatar" placeholder="e.g. IY" maxlength="3">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- English Department -->
+          <div class="form-group">
+            <label for="member-dept-en">القسم بالإنجليزية <span class="required">*</span></label>
+            <input type="text" id="member-dept-en" placeholder="e.g. Human Resources" required>
+          </div>
+          
+          <!-- Arabic Department -->
+          <div class="form-group">
+            <label for="member-dept-ar">القسم بالعربية <span class="required">*</span></label>
+            <input type="text" id="member-dept-ar" placeholder="مثال: الموارد البشرية" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel-btn" class="btn btn-secondary" data-i18n="btn-cancel">إلغاء</button>
+          <button type="submit" id="modal-submit-btn" class="btn btn-primary" data-i18n="btn-save">حفظ البيانات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Import File -->
+  <div id="import-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-i18n="import-modal-title">استيراد بيانات الأعضاء</h3>
+        <button id="import-modal-close-btn" class="modal-close-icon"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description" data-i18n="import-description">
+          قم برفع ملف `members.json` المُصدّر مسبقاً لتحديث قائمة الموظفين بالمكتب.
+        </p>
+        <div class="file-upload-zone" id="file-drop-zone">
+          <i data-lucide="file-json" class="upload-icon"></i>
+          <p data-i18n="upload-drag-text">اسحب ملف JSON هنا أو اضغط للاختيار</p>
+          <input type="file" id="file-input" accept=".json" class="hidden-file-input">
+        </div>
+        <div id="import-error" class="error-banner hidden"></div>
+        <div class="modal-actions">
+          <button type="button" id="import-cancel-btn" class="btn btn-secondary" data-i18n="btn-cancel">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

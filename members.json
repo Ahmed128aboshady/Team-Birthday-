@@ -1,0 +1,210 @@
+[
+  {
+    "id": "1",
+    "name": {
+      "en": "Iman Yousef",
+      "ar": "إيمان يوسف"
+    },
+    "dob": "1994-06-23",
+    "department": {
+      "en": "Human Resources",
+      "ar": "الموارد البشرية"
+    },
+    "avatar": "IY"
+  },
+  {
+    "id": "2",
+    "name": {
+      "en": "Ahmed Ali",
+      "ar": "أحمد علي"
+    },
+    "dob": "1991-06-25",
+    "department": {
+      "en": "Software Engineering",
+      "ar": "هندسة البرمجيات"
+    },
+    "avatar": "AA"
+  },
+  {
+    "id": "3",
+    "name": {
+      "en": "Sarah Hassan",
+      "ar": "سارة حسن"
+    },
+    "dob": "1996-07-02",
+    "department": {
+      "en": "UI/UX Design",
+      "ar": "تصميم تجربة المستخدم"
+    },
+    "avatar": "SH"
+  },
+  {
+    "id": "4",
+    "name": {
+      "en": "Omar Farouk",
+      "ar": "عمر فاروق"
+    },
+    "dob": "1989-01-15",
+    "department": {
+      "en": "Software Engineering",
+      "ar": "هندسة البرمجيات"
+    },
+    "avatar": "OF"
+  },
+  {
+    "id": "5",
+    "name": {
+      "en": "Nour El-Din",
+      "ar": "نور الدين"
+    },
+    "dob": "1993-02-18",
+    "department": {
+      "en": "Marketing",
+      "ar": "التسويق"
+    },
+    "avatar": "NE"
+  },
+  {
+    "id": "6",
+    "name": {
+      "en": "Yasmin Kamel",
+      "ar": "ياسمين كامل"
+    },
+    "dob": "1995-03-09",
+    "department": {
+      "en": "Product Management",
+      "ar": "إدارة المنتجات"
+    },
+    "avatar": "YK"
+  },
+  {
+    "id": "7",
+    "name": {
+      "en": "Mustafa Mahmoud",
+      "ar": "مصطفى محمود"
+    },
+    "dob": "1988-04-12",
+    "department": {
+      "en": "DevOps",
+      "ar": "العمليات السحابية"
+    },
+    "avatar": "MM"
+  },
+  {
+    "id": "8",
+    "name": {
+      "en": "Laila Shaker",
+      "ar": "ليلى شاكر"
+    },
+    "dob": "1997-05-30",
+    "department": {
+      "en": "QA Testing",
+      "ar": "اختبار الجودة"
+    },
+    "avatar": "LS"
+  },
+  {
+    "id": "9",
+    "name": {
+      "en": "Sherif Galal",
+      "ar": "شريف جلال"
+    },
+    "dob": "1990-08-24",
+    "department": {
+      "en": "Software Engineering",
+      "ar": "هندسة البرمجيات"
+    },
+    "avatar": "SG"
+  },
+  {
+    "id": "10",
+    "name": {
+      "en": "Farida Nabil",
+      "ar": "فريدة نبيل"
+    },
+    "dob": "1994-09-05",
+    "department": {
+      "en": "UI/UX Design",
+      "ar": "تصميم تجربة المستخدم"
+    },
+    "avatar": "FN"
+  },
+  {
+    "id": "11",
+    "name": {
+      "en": "Kareem Abdel-Aziz",
+      "ar": "كريم عبد العزيز"
+    },
+    "dob": "1992-10-11",
+    "department": {
+      "en": "Finance",
+      "ar": "المالية"
+    },
+    "avatar": "KA"
+  },
+  {
+    "id": "12",
+    "name": {
+      "en": "Hana Salem",
+      "ar": "هنا سالم"
+    },
+    "dob": "1998-11-20",
+    "department": {
+      "en": "Customer Support",
+      "ar": "خدمة العملاء"
+    },
+    "avatar": "HS"
+  },
+  {
+    "id": "13",
+    "name": {
+      "en": "Tarek Fahmy",
+      "ar": "طارق فهمي"
+    },
+    "dob": "1987-12-05",
+    "department": {
+      "en": "Sales",
+      "ar": "المبيعات"
+    },
+    "avatar": "TF"
+  },
+  {
+    "id": "14",
+    "name": {
+      "en": "Dina Mansour",
+      "ar": "دينا منصور"
+    },
+    "dob": "1995-12-14",
+    "department": {
+      "en": "Human Resources",
+      "ar": "الموارد البشرية"
+    },
+    "avatar": "DM"
+  },
+  {
+    "id": "15",
+    "name": {
+      "en": "Mohamed Ibrahim",
+      "ar": "محمد إبراهيم"
+    },
+    "dob": "1991-07-15",
+    "department": {
+      "en": "Software Engineering",
+      "ar": "هندسة البرمجيات"
+    },
+    "avatar": "MI"
+  },
+  {
+    "id": "16",
+    "name": {
+      "en": "Rania Youssef",
+      "ar": "رانيا يوسف"
+    },
+    "dob": "1993-09-30",
+    "department": {
+      "en": "Marketing",
+      "ar": "التسويق"
+    },
+    "avatar": "RY"
+  }
+]
